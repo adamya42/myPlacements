@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Users;
@@ -29,7 +28,11 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.services.AdminServices;
 import com.example.demo.services.MessageServices;
 import com.example.demo.services.OTPServices;
+import com.example.demo.services.ValidationErrorServices;
+import com.sun.mail.iap.Response;
 import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
+
+import io.micrometer.core.instrument.util.StringUtils;
 
 @RestController
 @RequestMapping("/admin/api")
@@ -47,6 +50,9 @@ public class ControllerAdmin {
 
 		@Autowired
 		private MessageServices messageServices;
+		
+//		@Autowired
+//		private ValidationErrorServices validationErrorServices;
 		
 		// private static final Logger logger= (Logger)
 		// LogFactory.getLog(Controller.class);
@@ -68,7 +74,10 @@ public class ControllerAdmin {
 	//##################################### 	Display All Users		##########################################	
 		
 		@GetMapping("/users")
-		public ResponseEntity<?> getAllUser() {
+		public ResponseEntity<?> getAllUser(@RequestParam(name = "userID",required = false)String id) {
+			if(StringUtils.isNotEmpty(id)) {
+				return new ResponseEntity<>(adminServices.getUserById(Integer.parseInt(id)),HttpStatus.OK);
+			}
 			List<Users> userList = adminServices.getAllUsers();
 			if (userList.isEmpty()) {
 				return new ResponseEntity<>("No Details Found In Database!", HttpStatus.NOT_FOUND);
@@ -80,31 +89,32 @@ public class ControllerAdmin {
 
 	//##################################### 	Fetch User by Id		##########################################
 		
-
-		@GetMapping("/users/{id}")
-		public ResponseEntity<?> getUserById(@Valid @PathVariable(name = "id") int userID) {
-			Users user = adminServices.getUserById(userID);
-
-			if (user == null) {
-				return new ResponseEntity<>("This User << " + userID + " >> details does not exist in database!",
-						HttpStatus.NOT_FOUND);
-			} else {
-
-				// return new ResponseEntity<>("Existing Record for User Id <<
-				// "+user.getUserID()+" >> is --"+ user,HttpStatus.OK);
-				return new ResponseEntity<>(user, HttpStatus.OK);
-			}
-		}
+//
+//		@GetMapping("/users/{id}")
+//		public ResponseEntity<?> getUserById(@Valid @PathVariable(name = "id") int userID) {
+//			Users user = adminServices.getUserById(userID);
+//
+//			if (user == null) {
+//				return new ResponseEntity<>("This User << " + userID + " >> details does not exist in database!",
+//						HttpStatus.NOT_FOUND);
+//			} else {
+//
+//				// return new ResponseEntity<>("Existing Record for User Id <<
+//				// "+user.getUserID()+" >> is --"+ user,HttpStatus.OK);
+//				return new ResponseEntity<>(user, HttpStatus.OK);
+//			}
+//		}
 
 	//##################################### 	Add Single User		##########################################
 			
 		@PostMapping("/addSingleUser")
-		public ResponseEntity<?> addUser(@Valid @RequestBody Users user, BindingResult result) throws MessagingException {
+		public ResponseEntity<?> addUser(@Valid @RequestBody Users user) throws MessagingException {
+			
+		
+			
 			Optional<Users> optUser =  adminServices.getUserByMail(user.getEmail());
 			
-			if(result.hasErrors()) {
-				return new ResponseEntity<String>("Invalid user object passed",HttpStatus.BAD_REQUEST);
-			}
+			
 			
 			if (optUser.isPresent()) {
 				return new ResponseEntity<>("User Name already exist.", HttpStatus.NOT_FOUND);

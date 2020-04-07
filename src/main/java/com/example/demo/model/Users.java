@@ -22,17 +22,17 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int userID;
 
-	@NotBlank(message = "Password must be entered")
+	
 	@Size(min = 4,max = 8,message = "Please eneter between 4 to 8 characters")
 	@Column(name = "Password")
 	private String password;
 
-	@NotBlank(message = "Password must be entered")
+	
 	@Column(name = "Email",unique = true)
 	private String email;
 	
 	
-	@NotBlank(message = "Password must be entered")
+	
 	@Column(name = "RoleId")
 	private int roleId;
 	

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.Role;
 import com.example.demo.model.Users;
 import com.example.demo.model.SiteModel.Schools;
 import com.example.demo.repository.UserRepository;
@@ -23,6 +24,9 @@ public class AdminServices {
 	
 	@Autowired
 	private SchoolRepository schoolRepository;
+	
+	@Autowired
+	private RoleServices roleServices;
 	
 	
 
@@ -151,18 +155,39 @@ public class AdminServices {
 
 
 
-	//############# 	 deleting user by id 	#####################
+	//############# 	 login authentication	#####################
 			
-			public int authenticateLogin(Optional<Users> optUser, Users user) {
+			public ResponseEntity<?> authenticateLogin(Optional<Users> optUser, Users user) {
 				if (optUser.isPresent() && user.getPassword()!=null && (user.getPassword().equals(optUser.get().getPassword()))) {
 					optUser.get().setIsActive(1);
 					optUser.get().setIsVerified(1);
 					userRepository.save(optUser.get());
-					return optUser.get().getRoleId();
+					int role = optUser.get().getRoleId();
+					Optional<Role> optRole = roleServices.getRoleById(role);
+					if (role==0) {			
+						return new ResponseEntity<>("Login Successful..Hello"+" "+ optRole.get().getRoleAs(), HttpStatus.OK);
+					}
+					
+					else if (role==2) {			
+						return new ResponseEntity<>("Login Successful..Hello"+" "+ optRole.get().getRoleAs(), HttpStatus.OK);
+					}
+					
+					else if (role==4) {			
+						return new ResponseEntity<>("Login Successful..Hello"+" "+ optRole.get().getRoleAs(), HttpStatus.OK);
+					}
+					
+					else if (role==6) {			
+						return new ResponseEntity<>("Login Successful..Hello"+" "+ optRole.get().getRoleAs(), HttpStatus.OK);
+					}
+					
+					else {
+					return new ResponseEntity<>("User << " + user.getEmail() + " >> Login Failed", HttpStatus.NOT_FOUND);
+				
+				}
 				}
 				else {
 					
-				return 404;
+				return new ResponseEntity<>("User << " + optUser.get().getEmail() + " >> Login Failed", HttpStatus.NOT_FOUND);
 			}
 				
 			}

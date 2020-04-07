@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+//import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +18,7 @@ import com.example.demo.model.Users;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.AdminServices;
 import com.example.demo.services.RoleServices;
+import com.example.demo.services.ValidationErrorServices;
 import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 
 @RestController
@@ -30,39 +31,22 @@ public class LoginController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired
-	private RoleServices roleServices;
+//	@Autowired
+//	private RoleServices roleServices;
+	
+//	@Autowired
+//	private ValidationErrorServices validationErrorServices;
 
 	
 	@PostMapping("login")
-	public ResponseEntity<?> login(@Valid @RequestBody Users user, BindingResult result) throws MessagingException {
-		if(result.hasErrors()) {
-			return new ResponseEntity<String>("Invalid user object passed",HttpStatus.BAD_REQUEST);
-		}
-		Optional<Users> optUser = adminServices.getUserByMail(user.getEmail());
+	public ResponseEntity<?> login(@Valid @RequestBody Users user) throws MessagingException {
+
+		Optional<Users> optUser = adminServices.getUserByMail(user.getEmail());		
+		
+		ResponseEntity<?> loginResponse = adminServices.authenticateLogin(optUser,user);
+		return loginResponse;
 		
 		
-		int role = adminServices.authenticateLogin(optUser,user);
-		Optional<Role> optRole = roleServices.getRoleById(role);
-		if (role==0) {			
-			return new ResponseEntity<>("Login Successful..Hello"+" "+ optRole.get().getRoleAs(), HttpStatus.OK);
-		}
-		
-		else if (role==2) {			
-			return new ResponseEntity<>("Login Successful..Hello"+" "+ optRole.get().getRoleAs(), HttpStatus.OK);
-		}
-		
-		else if (role==4) {			
-			return new ResponseEntity<>("Login Successful..Hello"+" "+ optRole.get().getRoleAs(), HttpStatus.OK);
-		}
-		
-		else if (role==6) {			
-			return new ResponseEntity<>("Login Successful..Hello"+" "+ optRole.get().getRoleAs(), HttpStatus.OK);
-		}
-		
-		else {
-		return new ResponseEntity<>("User << " + user.getEmail() + " >> Login Failed", HttpStatus.NOT_FOUND);
-	}
 	}
 
 	
