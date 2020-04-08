@@ -1,19 +1,24 @@
 package com.example.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "users")
-public class Users {
+public class Users {//implements UserDetails{
 	
 	
 
@@ -29,14 +34,16 @@ public class Users {
 
 	
 	@Column(name = "Email",unique = true)
+	@Email(message = "Username needs to be an email")
+    @NotBlank(message = "username is required")
 	private String email;
 	
 	
-	
+	@com.sun.istack.NotNull
 	@Column(name = "RoleId")
 	private int roleId;
 	
-	  
+	@NotNull(message = "empty")
 	@Column(name = "IsVerified")
 	private int isVerified;
 
@@ -172,6 +179,42 @@ public class Users {
 	public void setCreatedBy(Integer createdBy) {
 		this.createdBy = createdBy;
 	}
+
+//	@Override
+//	public Collection<? extends GrantedAuthority> getAuthorities() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public String getUsername() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public boolean isAccountNonExpired() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isAccountNonLocked() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isCredentialsNonExpired() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isEnabled() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
 
 	
 	

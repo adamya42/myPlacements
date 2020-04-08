@@ -51,8 +51,8 @@ public class ControllerAdmin {
 		@Autowired
 		private MessageServices messageServices;
 		
-//		@Autowired
-//		private ValidationErrorServices validationErrorServices;
+		@Autowired
+		private ValidationErrorServices validationErrorServices;
 		
 		// private static final Logger logger= (Logger)
 		// LogFactory.getLog(Controller.class);
@@ -108,9 +108,10 @@ public class ControllerAdmin {
 	//##################################### 	Add Single User		##########################################
 			
 		@PostMapping("/addSingleUser")
-		public ResponseEntity<?> addUser(@Valid @RequestBody Users user) throws MessagingException {
+		public ResponseEntity<?> addUser(@Valid @RequestBody Users user, BindingResult result) throws MessagingException {
 			
-		
+			 ResponseEntity<?> errorMap = validationErrorServices.ValidationServiceHandler(result);
+		        if(errorMap!=null) return errorMap;
 			
 			Optional<Users> optUser =  adminServices.getUserByMail(user.getEmail());
 			
