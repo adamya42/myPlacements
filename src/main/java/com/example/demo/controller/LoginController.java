@@ -51,11 +51,11 @@ public class LoginController {
 
 	
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(@RequestBody Users user) throws MessagingException {
+	public ResponseEntity<?> logout(@Valid @RequestBody Users user) throws MessagingException {
 		Users optUser = adminServices.getUserById(user.getUserID());
 				//session required
-		if (optUser.getIsActive()==1) {
-			optUser.setIsActive(0);
+		if (optUser.isActive()==true) {
+			optUser.setActive(false);
 			userRepository.save(optUser);
 			return new ResponseEntity<>("Logout Successful", HttpStatus.OK);
 		}

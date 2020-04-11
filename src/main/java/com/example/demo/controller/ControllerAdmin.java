@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.StreamingHttpOutputMessage.Body;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 import io.micrometer.core.instrument.util.StringUtils;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/admin/api")
 public class ControllerAdmin {
 
@@ -74,7 +76,7 @@ public class ControllerAdmin {
 	//##################################### 	Display All Users		##########################################	
 		
 		@GetMapping("/users")
-		public ResponseEntity<?> getAllUser(@RequestParam(name = "userID",required = false)String id) {
+		public ResponseEntity<?> getAllUser(@Valid @RequestParam(name = "userID",required = false)String id) {
 			if(StringUtils.isNotEmpty(id)) {
 				return new ResponseEntity<>(adminServices.getUserById(Integer.parseInt(id)),HttpStatus.OK);
 			}

@@ -43,16 +43,18 @@ public class Users {//implements UserDetails{
 	@Column(name = "RoleId")
 	private int roleId;
 	
-	@NotNull(message = "empty")
-	@Column(name = "IsVerified")
-	private int isVerified;
+	
+	
+
+	@Column(name = "IsVerified",nullable = false, columnDefinition = "bit default 0")
+	private boolean isVerified;
 
 	  
-	@Column(name = "IsActive")
-	private int isActive;
+	@Column(name = "IsActive",nullable = false, columnDefinition = "bit default 0")
+	private boolean isActive;
 
-	@Column(name = "IsDeleted")
-	private int isDeleted;
+	
+	
 	
 
 	
@@ -60,6 +62,8 @@ public class Users {//implements UserDetails{
 
 	//// use @CreationTimestamp to generate current date or use below
 	//// @Temporal(TemporalType.TIMESTAMP) with @PrePersist
+
+	
 
 	@Column(name = "CreatedOn")
 	@CreationTimestamp
@@ -122,30 +126,7 @@ public class Users {//implements UserDetails{
 		this.roleId = roleId;
 	}
 
-	public int getIsVerified() {
-		return isVerified;
-	}
-
-	public void setIsVerified(int isVerified) {
-		this.isVerified = isVerified;
-	}
-
-	public int getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(int isActive) {
-		this.isActive = isActive;
-	}
-
-	public int getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(int isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-
+	
 	public LocalDateTime getCreatedOn() {
 		return createdOn;
 	}
@@ -179,6 +160,26 @@ public class Users {//implements UserDetails{
 	public void setCreatedBy(Integer createdBy) {
 		this.createdBy = createdBy;
 	}
+	
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	
+
+	public boolean isVerified() {
+		return isVerified;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	
 
 //	@Override
 //	public Collection<? extends GrantedAuthority> getAuthorities() {

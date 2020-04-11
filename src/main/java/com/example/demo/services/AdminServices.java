@@ -85,6 +85,7 @@ public class AdminServices {
 			  return  optUserByMail;
 		  
 		  }
+
 		  
 		
 	//################### Add Single User  #####################################
@@ -159,8 +160,8 @@ public class AdminServices {
 			
 			public ResponseEntity<?> authenticateLogin(Optional<Users> optUser, Users user) {
 				if (optUser.isPresent() && user.getPassword()!=null && (user.getPassword().equals(optUser.get().getPassword()))) {
-					optUser.get().setIsActive(1);
-					optUser.get().setIsVerified(1);
+					optUser.get().setVerified(true);
+					optUser.get().setActive(true);
 					userRepository.save(optUser.get());
 					int role = optUser.get().getRoleId();
 					Optional<Role> optRole = roleServices.getRoleById(role);
