@@ -52,16 +52,16 @@ public class LoginController {
 	
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(@Valid @RequestBody Users user) throws MessagingException {
-		Users optUser = adminServices.getUserById(user.getUserID());
+		Optional<Users> optUser = adminServices.getUserById(user.getUserID());
 				//session required
-		if (optUser.isActive()==true) {
-			optUser.setActive(false);
-			userRepository.save(optUser);
+		if (optUser.get().isActive()==true) {
+			optUser.get().setActive(false);
+			userRepository.save(optUser.get());
 			return new ResponseEntity<>("Logout Successful", HttpStatus.OK);
 		}
 		else {
 			
-		return new ResponseEntity<>("User << " + optUser.getEmail() + " >> Logout Failed", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>("User << " + optUser.get().getEmail() + " >> Logout Failed", HttpStatus.NOT_FOUND);
 	}
 	}
 

@@ -124,7 +124,7 @@ public class OTPController {
 			}
 			
 			int userId= users.getUserID();
-			Users user1 = adminServices.getUserById(userId);
+			Optional<Users> user1 = adminServices.getUserById(userId);
 				int genOTP = otpServices.generatingOTP();
 				otpServices.addOTP(genOTP, userId);
 				
@@ -134,7 +134,7 @@ public class OTPController {
 				String textMail = messageServices.getMailTextResend();
 				
 				
-				otpServices.mailDelivery(user1.getEmail(), otp,subject,textMail);
+				otpServices.mailDelivery(user1.get().getEmail(), otp,subject,textMail);
 				
 			
 				return new ResponseEntity<>("Resend OTP  Successfull" + userId, HttpStatus.OK);

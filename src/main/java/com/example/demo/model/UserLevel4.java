@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
 
+
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 
 import lombok.Getter;
@@ -14,7 +17,7 @@ public class UserLevel4 { // department coordinator
 	
 	@Id
 	@Column(name = "Id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column(name = "Userid")
@@ -31,13 +34,28 @@ public class UserLevel4 { // department coordinator
 	@Column(name = "EmployeeId")
 	private String employeeId;
 	
-	@Column(name = "PhoneNo")
+	@Column(name = "PhoneNo",columnDefinition = "0")
 	private long phoneNo;
+	
+
+	@Column(name = "Gender")
+	private byte gender = 4;// 4 MEANS NOT FILLED
+	
+	@Column(name = "DOB")
+	private LocalDateTime dob;
 
 	
 	//############################# 	Getter & Setter 	#################################################################
 
 	
+
+	public LocalDateTime getDob() {
+		return dob;
+	}
+
+	public void setDob(LocalDateTime dob) {
+		this.dob = dob;
+	}
 
 	public int getId() {
 		return id;
@@ -86,6 +104,15 @@ public class UserLevel4 { // department coordinator
 	public void setPhoneNo(long phoneNo) {
 		this.phoneNo = phoneNo;
 	}
+
+	public byte getGender() {
+		return gender;
+	}
+
+	public void setGender(byte gender) {
+		this.gender = gender;
+	}
+
 	
 
 }

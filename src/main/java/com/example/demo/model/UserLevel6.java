@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -16,7 +16,7 @@ public class UserLevel6 {  // Students
 	
 	@Id
 	@Column(name = "Id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
 	@Column(name = "Userid")
@@ -37,19 +37,30 @@ public class UserLevel6 {  // Students
 	private String branch;
 
 	@Column(name = "Gender")
-	private int gender;
-	
-	@Column(name = "PhoneNo")
-	private long phoneNo;
+	private byte gender = 4;// 4 MEANS NOT FILLED
 	
 	@Column(name = "DOB")
-	private Date dob;
+	private LocalDateTime dob;
+	
+	
+
+	@Column(name = "PhoneNo",columnDefinition = "0")
+	private long phoneNo;
+	
+	
 	
 
 	//############################# 	Getter & Setter 	#################################################################
 
 	
+	public LocalDateTime getDob() {
+		return dob;
+	}
 
+	public void setDob(LocalDateTime dob) {
+		this.dob = dob;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -98,13 +109,7 @@ public class UserLevel6 {  // Students
 		this.branch = branch;
 	}
 
-	public int getGender() {
-		return gender;
-	}
-
-	public void setGender(int gender) {
-		this.gender = gender;
-	}
+	
 
 	public long getPhoneNo() {
 		return phoneNo;
@@ -112,6 +117,14 @@ public class UserLevel6 {  // Students
 
 	public void setPhoneNo(long phoneNo) {
 		this.phoneNo = phoneNo;
+	}
+
+	public byte getGender() {
+		return gender;
+	}
+
+	public void setGender(byte gender) {
+		this.gender = gender;
 	}
 	
 

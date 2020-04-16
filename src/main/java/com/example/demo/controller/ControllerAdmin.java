@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,17 +77,19 @@ public class ControllerAdmin {
 	//##################################### 	Display All Users		##########################################	
 		
 		@GetMapping("/users")
-		public ResponseEntity<?> getAllUser(@Valid @RequestParam(name = "userID",required = false)String id) {
+		public ResponseEntity<?> getAllUser(@Valid @RequestParam(name = "id",required = false)String id) {
 			if(StringUtils.isNotEmpty(id)) {
-				return new ResponseEntity<>(adminServices.getUserById(Integer.parseInt(id)),HttpStatus.OK);
-			}
+			List<Users> userList = adminServices.toList(adminServices.getUserById(Integer.parseInt(id)));
+				return new ResponseEntity<>(adminServices.displayUsersDetails(userList),HttpStatus.OK);
+			}else {
 			List<Users> userList = adminServices.getAllUsers();
 			if (userList.isEmpty()) {
 				return new ResponseEntity<>("No Details Found In Database!", HttpStatus.NOT_FOUND);
 			}
 			log.debug("Users found");
-			return new ResponseEntity<>(userList, HttpStatus.OK);
+			return new ResponseEntity<>(adminServices.displayUsersDetails(userList), HttpStatus.OK);
 
+		}
 		}
 
 	//##################################### 	Fetch User by Id		##########################################
@@ -127,13 +130,13 @@ public class ControllerAdmin {
 		//	user.setCreatedBy('session user');	
 				
 			
-			adminServices.addUser(user);
+				String credential =	adminServices.addUser(user);
 
 			String mail = user.getEmail();
 			String subject = messageServices.getMailSubjectCredentials();
 			String text = messageServices.getMailtextCredentials();
 			
-			String credential=user.getPassword();
+			//String credential=user.getPassword();
 			
 		//---------Send Credentials---------- 	
 			otpServices.mailDelivery(mail, credential,subject,text);
@@ -148,12 +151,12 @@ public class ControllerAdmin {
 		
 		@DeleteMapping("/users/delete/{id}")
 		public ResponseEntity<?> deleteUserByID(@Valid @PathVariable(name = "id") int userID) {
-			Users user = adminServices.getUserById(userID);
-			if (user == null) {
+			Optional<Users> user = adminServices.getUserById(userID);
+			if (!user.isPresent()) {
 				return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
 			}
-			adminServices.deleteUserByID(user);
-			return new ResponseEntity<>("User with USERID <<  " + user.getUserID() + "  >> Deleted successfully!",
+			adminServices.deleteUserByID(user.get().getUserID());
+			return new ResponseEntity<>("User with USERID <<  " + user.get().getUserID() + "  >> Deleted successfully!",
 					HttpStatus.OK);
 
 			

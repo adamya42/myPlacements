@@ -7,6 +7,14 @@ import {
   TablePagination,
   TableRow,
   Checkbox,
+  Typography,
+  Tooltip,
+  IconButton,
+  Menu,
+  MenuList,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
 } from "@material-ui/core";
 import { FuseScrollbars } from "@fuse";
 import { withRouter } from "react-router-dom";
@@ -15,6 +23,9 @@ import _ from "@lodash";
 import ProductsTableHead from "./ProductsTableHead";
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
+import ReactTable from "react-table";
+import { FuseUtils, FuseAnimate } from "@fuse";
+import ProductsMultiSelectMenu from "./ProductsMultiselectMenu";
 
 function ProductsTable(props) {
   const dispatch = useDispatch();
@@ -25,213 +36,198 @@ function ProductsTable(props) {
     ({ eCommerceApp }) => eCommerceApp.products.searchText
   );
 
-  const [selected, setSelected] = useState([]);
-  const [data, setData] = useState(products);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [order, setOrder] = useState({
-    direction: "asc",
-    id: null,
-  });
+  const selectedProductIds = useSelector(
+    ({ eCommerceApp }) => eCommerceApp.products.selectedProductIds
+  );
+
+  //const [selected, setSelected] = useState([]);
+  // const [data, setData] = useState(products);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [order, setOrder] = useState({
+  //   direction: "asc",
+  //   id: null,
+  // });
 
   useEffect(() => {
     dispatch(Actions.getProducts());
   }, [dispatch]);
 
-  useEffect(() => {
-    setData(
-      searchText.length === 0
-        ? products
-        : _.filter(products, (item) =>
-            item.name.toLowerCase().includes(searchText.toLowerCase())
-          )
-    );
-  }, [products, searchText]);
-
-  function handleRequestSort(event, property) {
-    const id = property;
-    let direction = "desc";
-
-    if (order.id === property && order.direction === "desc") {
-      direction = "asc";
-    }
-
-    setOrder({
-      direction,
-      id,
-    });
-  }
-
-  function handleSelectAllClick(event) {
-    if (event.target.checked) {
-      setSelected(data.map((n) => n.id));
-      return;
-    }
-    setSelected([]);
-  }
-
   function handleClick(item) {
     props.history.push(
-      "/apps/e-commerce/products/" + item.id + "/" + item.handle
+      "/apps/e-commerce/products/" + item.id //+ "/" + item.handle
     );
   }
 
-  function handleCheck(event, id) {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+  //###################################   START   ###########################################
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
+  const [filteredData, setFilteredData] = useState(null);
+
+  useEffect(() => {
+    function getFilteredArray(data, searchText) {
+      const arr = Object.keys(data).map((id) => data[id]);
+      if (searchText.length === 0) {
+        return arr;
+      }
+      return FuseUtils.filterArrayByString(arr, searchText);
     }
 
-    setSelected(newSelected);
+    if (products) {
+      setFilteredData(getFilteredArray(products, searchText));
+    }
+  }, [products, searchText]);
+
+  if (!filteredData) {
+    return null;
   }
 
-  function handleChangePage(event, page) {
-    setPage(page);
+  if (filteredData.length === 0) {
+    return (
+      <div className="flex flex-1 items-center justify-center h-full">
+        <Typography color="textSecondary" variant="h5">
+          There are no products!
+        </Typography>
+      </div>
+    );
   }
 
-  function handleChangeRowsPerPage(event) {
-    setRowsPerPage(event.target.value);
-  }
+  //######################################   END   #########################################
 
   return (
     <div className="w-full flex flex-col">
-      <FuseScrollbars className="flex-grow overflow-x-auto">
-        <Table className="min-w-xl" aria-labelledby="tableTitle">
-          <ProductsTableHead
-            numSelected={selected.length}
-            order={order}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={data.length}
-          />
-
-          <TableBody>
-            {_.orderBy(
-              data,
-              [
-                (o) => {
-                  switch (order.id) {
-                    case "categories": {
-                      return o.categories[0];
-                    }
-                    default: {
-                      return o[order.id];
-                    }
+      <FuseAnimate animation="transition.slideUpIn" delay={300}>
+        <FuseScrollbars className="flex-grow overflow-x-auto">
+          <ReactTable
+            className="min-w-xl"
+            aria-labelledby="tableTitle"
+            getTrProps={(state, rowInfo, column) => {
+              return {
+                className: "cursor-pointer",
+                onClick: (e, handleOriginal) => {
+                  if (rowInfo) {
+                    handleClick(rowInfo.original);
                   }
                 },
-              ],
-              [order.direction]
-            )
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((n) => {
-                const isSelected = selected.indexOf(n.id) !== -1;
-                return (
-                  <TableRow
-                    className="h-64 cursor-pointer"
-                    hover
-                    role="checkbox"
-                    aria-checked={isSelected}
-                    tabIndex={-1}
-                    key={n.id}
-                    selected={isSelected}
-                    onClick={(event) => handleClick(n)}
-                  >
-                    <TableCell
-                      className="w-48 px-4 sm:px-12"
-                      padding="checkbox"
-                    >
-                      <Checkbox
-                        checked={isSelected}
-                        onClick={(event) => event.stopPropagation()}
-                        onChange={(event) => handleCheck(event, n.id)}
-                      />
-                    </TableCell>
-
-                    <TableCell
-                      className="w-52"
-                      component="th"
-                      scope="row"
-                      padding="none"
-                    >
-                      {n.images.length > 0 && n.featuredImageId ? (
-                        <img
-                          className="w-full block rounded"
-                          src={_.find(n.images, { id: n.featuredImageId }).url}
-                          alt={n.name}
-                        />
-                      ) : (
-                        <img
-                          className="w-full block rounded"
-                          src="assets/images/ecommerce/product-image-placeholder.png"
-                          alt={n.name}
-                        />
-                      )}
-                    </TableCell>
-
-                    <TableCell component="th" scope="row">
-                      {n.name}
-                    </TableCell>
-
-                    <TableCell className="truncate" component="th" scope="row">
-                      {n.categories.join(", ")}
-                    </TableCell>
-
-                    <TableCell component="th" scope="row" align="right">
-                      <span>$</span>
-                      {n.priceTaxIncl}
-                    </TableCell>
-
-                    <TableCell component="th" scope="row" align="right">
-                      {n.quantity}
-                      <i
-                        className={clsx(
-                          "inline-block w-8 h-8 rounded ml-8",
-                          n.quantity <= 5 && "bg-red",
-                          n.quantity > 5 && n.quantity <= 25 && "bg-orange",
-                          n.quantity > 25 && "bg-green"
-                        )}
-                      />
-                    </TableCell>
-
-                    <TableCell component="th" scope="row" align="right">
-                      {n.active ? (
-                        <Icon className="text-green text-20">check_circle</Icon>
-                      ) : (
-                        <Icon className="text-red text-20">remove_circle</Icon>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </FuseScrollbars>
-
-      <TablePagination
-        component="div"
-        count={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        backIconButtonProps={{
-          "aria-label": "Previous Page",
-        }}
-        nextIconButtonProps={{
-          "aria-label": "Next Page",
-        }}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+              };
+            }}
+            data={filteredData}
+            columns={[
+              {
+                Header: () => (
+                  <Checkbox
+                    onClick={(event) => {
+                      event.stopPropagation();
+                    }}
+                    onChange={(event) => {
+                      event.target.checked
+                        ? dispatch(Actions.selectAllProducts())
+                        : dispatch(Actions.deSelectAllProducts());
+                    }}
+                    checked={
+                      selectedProductIds.length ===
+                        Object.keys(products).length &&
+                      selectedProductIds.length > 0
+                    }
+                    indeterminate={
+                      selectedProductIds.length !==
+                        Object.keys(products).length &&
+                      selectedProductIds.length > 0
+                    }
+                  />
+                ),
+                accessor: "",
+                Cell: (row) => {
+                  return (
+                    <Checkbox
+                      onClick={(event) => {
+                        event.stopPropagation();
+                      }}
+                      checked={selectedProductIds.includes(row.value.id)}
+                      onChange={() =>
+                        dispatch(Actions.toggleInSelectedProducts(row.value.id))
+                      }
+                    />
+                  );
+                },
+                className: "justify-center",
+                sortable: false,
+                width: 64,
+              },
+              {
+                Header: () =>
+                  selectedProductIds.length > 0 && <ProductsMultiSelectMenu />,
+                accessor: "avatar",
+                Cell: "",
+                className: "justify-center",
+                width: 64,
+                sortable: false,
+              },
+              {
+                Header: "Name",
+                accessor: "name",
+                filterable: true,
+                className: "font-bold",
+              },
+              {
+                Header: "UniqueID",
+                accessor: "uniqueId",
+                filterable: true,
+                className: "font-bold",
+              },
+              {
+                Header: "Role",
+                accessor: "role",
+                filterable: true,
+                className: "font-bold",
+              },
+              {
+                Header: "Email",
+                accessor: "email",
+                filterable: true,
+                className: "font-bold",
+              },
+              {
+                Header: "Created On",
+                accessor: "createdOn",
+                filterable: true,
+                className: "font-bold",
+              },
+              {
+                Header: "Active",
+                accessor: "active",
+                width: 64,
+                Cell: (row) => {
+                  return row.original.active ? (
+                    <Icon className="text-green text-20">check_circle</Icon>
+                  ) : (
+                    <Icon className="text-red text-20">remove_circle</Icon>
+                  );
+                },
+                filterable: false,
+                sortable: true,
+                className: "font-bold",
+              },
+              {
+                Header: "Verified",
+                accessor: "verified",
+                width: 64,
+                Cell: (row) => {
+                  return row.original.verified ? (
+                    <Icon className="text-green text-20">check_circle</Icon>
+                  ) : (
+                    <Icon className="text-red text-20">remove_circle</Icon>
+                  );
+                },
+                filterable: false,
+                sortable: true,
+                className: "font-bold",
+              },
+            ]}
+            defaultPageSize={10}
+            noDataText="No users found"
+          />
+        </FuseScrollbars>
+      </FuseAnimate>
     </div>
   );
 }
