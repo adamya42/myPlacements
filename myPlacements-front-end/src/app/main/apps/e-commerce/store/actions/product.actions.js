@@ -6,8 +6,10 @@ export const GET_PRODUCT = "[E-COMMERCE APP] GET PRODUCT";
 export const SAVE_PRODUCT = "[E-COMMERCE APP] SAVE PRODUCT";
 
 export function getProduct(params) {
-  const request = axios.get("/api/e-commerce-app/product", { params });
-
+  //const request = axios.get("/api/e-commerce-app/product", { params });http://localhost:8080/admin/api/users?id=
+  const request = axios.get("http://localhost:8080/admin/api/users?id=", {
+    params,
+  });
   return (dispatch) =>
     request.then((response) =>
       dispatch({
