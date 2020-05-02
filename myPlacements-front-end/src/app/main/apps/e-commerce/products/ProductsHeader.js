@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Button, Input, Icon, Typography } from "@material-ui/core";
+import { Paper, Button, Input, Fab, Icon, Typography } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import { FuseAnimate } from "@fuse";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import * as Actions from "../store/actions";
 
 function ProductsHeader(props) {
   const dispatch = useDispatch();
+  //const classes = useStyles(props);
   const searchText = useSelector(
     ({ eCommerceApp }) => eCommerceApp.products.searchText
   );
@@ -53,15 +54,18 @@ function ProductsHeader(props) {
         </ThemeProvider>
       </div>
       <FuseAnimate animation="transition.slideRightIn" delay={300}>
-        <Button
-          component={Link}
-          to="/apps/e-commerce/products/new"
+        <Fab
+          // color="primary"
+          // aria-label="add"
           className="whitespace-no-wrap"
-          variant="contained"
+          onClick={(ev) => dispatch(Actions.openAddUserDialog())}
+          variant="extended"
         >
-          <span className="hidden sm:flex">Add New User</span>
+          <Icon>person_add</Icon>
+
+          <span className="hidden sm:flex">&nbsp;&nbsp;Add New User</span>
           <span className="flex sm:hidden">New</span>
-        </Button>
+        </Fab>
       </FuseAnimate>
     </div>
   );

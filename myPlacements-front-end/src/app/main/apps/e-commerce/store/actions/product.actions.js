@@ -1,15 +1,15 @@
 import axios from "axios";
 import { FuseUtils } from "@fuse";
 import { showMessage } from "app/store/actions/fuse";
+import { getProducts } from "./products.actions";
 
 export const GET_PRODUCT = "[E-COMMERCE APP] GET PRODUCT";
 export const SAVE_PRODUCT = "[E-COMMERCE APP] SAVE PRODUCT";
+export const ADD_SINGLE_USER = "[E-COMMERCE APP] ADD SINGLE USER";
 
 export function getProduct(params) {
-  //const request = axios.get("/api/e-commerce-app/product", { params });http://localhost:8080/admin/api/users?id=
-  const request = axios.get("http://localhost:8080/admin/api/users?id=", {
-    params,
-  });
+  //const request = axios.get("/api/e-commerce-app/product", { params });
+  const request = axios.get("http://localhost:8080/admin/api/users/" + params);
   return (dispatch) =>
     request.then((response) =>
       dispatch({
@@ -33,31 +33,21 @@ export function saveProduct(data) {
     });
 }
 
-export function newProduct() {
-  const data = {
-    id: FuseUtils.generateGUID(),
-    name: "",
-    handle: "",
-    description: "",
-    categories: [],
-    tags: [],
-    images: [],
-    priceTaxExcl: 0,
-    priceTaxIncl: 0,
-    taxRate: 0,
-    comparedPrice: 0,
-    quantity: 0,
-    sku: "",
-    width: "",
-    height: "",
-    depth: "",
-    weight: "",
-    extraShippingFee: 0,
-    active: true,
-  };
+export function addSingleUser(addUser) {
+  return (dispatch, getState) => {
+    const { routeParams } = getState().eCommerceApp.products;
 
-  return {
-    type: GET_PRODUCT,
-    payload: data,
+    const request = axios.post(
+      "http://localhost:8080/admin/api/addSingleUser",
+      addUser
+    );
+
+    return request.then((response) =>
+      Promise.all([
+        dispatch({
+          type: ADD_SINGLE_USER,
+        }),
+      ]).then(() => dispatch(getProducts(routeParams)))
+    );
   };
 }

@@ -5,6 +5,13 @@ const initialState = {
   searchText: "",
   selectedProductIds: [],
   routeParams: {},
+  addUserDialog: {
+    type: "new",
+    props: {
+      open: false,
+    },
+    data: [],
+  },
 };
 
 const productsReducer = function (state = initialState, action) {
@@ -53,6 +60,31 @@ const productsReducer = function (state = initialState, action) {
       return {
         ...state,
         selectedProductIds: selectedProductIds,
+      };
+    }
+
+    case Actions.OPEN_ADD_USER_DIALOG: {
+      return {
+        ...state,
+        addUserDialog: {
+          type: "new",
+          props: {
+            open: true,
+          },
+          data: [],
+        },
+      };
+    }
+    case Actions.CLOSE_ADD_USER_DIALOG: {
+      return {
+        ...state,
+        addUserDialog: {
+          type: "new",
+          props: {
+            open: false,
+          },
+          data: [],
+        },
       };
     }
     default: {

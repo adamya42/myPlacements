@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +23,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Users;
+import com.example.demo.model.helper_classes.AddUser;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.AdminServices;
 import com.example.demo.services.MessageServices;
@@ -74,12 +77,13 @@ public class ControllerAdmin {
 
 		}
 
-	//##################################### 	Display All Users		##########################################	
+	//##################################### 	Display All Users & User by ID		####################################	
 		
-		@GetMapping("/users")
-		public ResponseEntity<?> getAllUser(@Valid @RequestParam(name = "id",required = false)String id) {
-			if(StringUtils.isNotEmpty(id)) {
-			List<Users> userList = adminServices.toList(adminServices.getUserById(Integer.parseInt(id)));
+		@GetMapping(value = {"/users/{id}","/users"})
+		public ResponseEntity<?> getAllUser(@Valid @PathVariable(name = "id",required = false)Integer id) throws ParseException {
+			//if(StringUtils.isNotEmpty(id)) {
+			if(id != null) {
+				List<Users> userList = adminServices.toList(adminServices.getUserById(id));
 				return new ResponseEntity<>(adminServices.displayUsersDetails(userList),HttpStatus.OK);
 			}else {
 			List<Users> userList = adminServices.getAllUsers();
@@ -113,26 +117,25 @@ public class ControllerAdmin {
 	//##################################### 	Add Single User		##########################################
 			
 		@PostMapping("/addSingleUser")
-		public ResponseEntity<?> addUser(@Valid @RequestBody Users user, BindingResult result) throws MessagingException {
+		public ResponseEntity<?> addUser(@Valid @RequestBody AddUser addUser, BindingResult result) throws MessagingException {
 			
 			 ResponseEntity<?> errorMap = validationErrorServices.ValidationServiceHandler(result);
 		        if(errorMap!=null) return errorMap;
-			
-			Optional<Users> optUser =  adminServices.getUserByMail(user.getEmail());
+			Optional<Users> optUser =  adminServices.getUserByMail(addUser.getEmail());
 			
 			
 			
 			if (optUser.isPresent()) {
-				return new ResponseEntity<>("User Name already exist.", HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>("User Name already exist.", HttpStatus.FORBIDDEN);
 			}
 			else {
 				
 		//	user.setCreatedBy('session user');	
 				
 			
-				String credential =	adminServices.addUser(user);
+				String credential =	adminServices.addUser(addUser);
 
-			String mail = user.getEmail();
+			String mail = addUser.getEmail();
 			String subject = messageServices.getMailSubjectCredentials();
 			String text = messageServices.getMailtextCredentials();
 			
@@ -141,7 +144,7 @@ public class ControllerAdmin {
 		//---------Send Credentials---------- 	
 			otpServices.mailDelivery(mail, credential,subject,text);
 			
-			return new ResponseEntity<>("User << " + user.getEmail() + " >> Registered and credentials Send Successfully!", HttpStatus.OK);
+			return new ResponseEntity<>("User << " + addUser.getEmail() + " >> Registered and credentials Send Successfully!", HttpStatus.OK);
 		}
 		}
 
@@ -185,6 +188,9 @@ public class ControllerAdmin {
 	
 	
 	
+		
+		
+		
 	
 	
 	

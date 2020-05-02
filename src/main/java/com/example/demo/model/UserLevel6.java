@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -39,8 +40,12 @@ public class UserLevel6 {  // Students
 	@Column(name = "Gender")
 	private byte gender = 4;// 4 MEANS NOT FILLED
 	
+//	@Column(name = "DOB")
+//	private LocalDateTime dob;
+	
 	@Column(name = "DOB")
-	private LocalDateTime dob;
+	private Date dob;
+	
 	
 	
 
@@ -53,11 +58,19 @@ public class UserLevel6 {  // Students
 	//############################# 	Getter & Setter 	#################################################################
 
 	
-	public LocalDateTime getDob() {
+//	public LocalDateTime getDob() {
+//		return dob;
+//	}
+//
+//	public void setDob(LocalDateTime dob) {
+//		this.dob = dob;
+//	}
+	
+	public Date getDob() {
 		return dob;
 	}
 
-	public void setDob(LocalDateTime dob) {
+	public void setDob(Date dob) {
 		this.dob = dob;
 	}
 	

@@ -39,6 +39,7 @@
     "react-beautiful-dnd": "11.0.3",
     "react-big-calendar": "0.21.0",
     "react-chartjs-2": "2.7.6",
+    "react-datepicker": "^2.14.1",
     "react-dom": "16.8.6",
     "react-draggable": "3.3.0",
     "react-frame-component": "4.1.0",
@@ -101,5 +102,6 @@
       "last 1 safari version",
       "ie 11"
     ]
-  }
+  },
+  "proxy": "http://localhost:8080"
 }

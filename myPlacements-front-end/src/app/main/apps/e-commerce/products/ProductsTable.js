@@ -1,26 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  Icon,
-  Table,
-  TableBody,
-  TableCell,
-  TablePagination,
-  TableRow,
-  Checkbox,
-  Typography,
-  Tooltip,
-  IconButton,
-  Menu,
-  MenuList,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from "@material-ui/core";
+import { Icon, Checkbox, Typography } from "@material-ui/core";
 import { FuseScrollbars } from "@fuse";
 import { withRouter } from "react-router-dom";
-import clsx from "clsx";
-import _ from "@lodash";
-import ProductsTableHead from "./ProductsTableHead";
+// import clsx from "clsx";
+// import _ from "@lodash";
+// import ProductsTableHead from "./ProductsTableHead";
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import ReactTable from "react-table";
@@ -54,10 +38,9 @@ function ProductsTable(props) {
   }, [dispatch]);
 
   function handleClick(item) {
-    props.history.push(
-      "/apps/e-commerce/products/" + item.id //+ "/" + item.handle
-    );
+    props.history.push("/apps/e-commerce/products/" + item.id);
   }
+  //+ "/" + item.handle
 
   //###################################   START   ###########################################
 

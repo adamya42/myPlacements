@@ -1,6 +1,9 @@
-package com.example.demo.model;
+package com.example.demo.model.helper_classes;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class UserInfo {
 	
@@ -10,17 +13,27 @@ public class UserInfo {
 	private long phoneNo;
 	private String department;
 	private String gender;
-	private String DOB;
+	
+	
 	private boolean active;
 	private boolean verified;
 	private String createdOn;
 	private String modifiedOn;
 	private String createdBy;
 	private int id;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date bday; 
 	
 	
 //################################### 	Getters and Setters 	#########################################
 	
+	
+	public Date getBday() {
+		return bday;
+	}
+	public void setBday(Date bday) {
+		this.bday = bday;
+	}
 	public int getId() {
 		return id;
 	}
@@ -101,12 +114,7 @@ public class UserInfo {
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
-	public void setDOB(String dOB) {
-		DOB = dOB;
-	}
-	public String getDOB() {
-		return DOB;
-	}
+	
 
 	
 	

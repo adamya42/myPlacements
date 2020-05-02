@@ -43,15 +43,15 @@ public class UserLevel2 {//placement coordinator
 	private byte gender = 4;// 4 MEANS NOT FILLED
 	
 	@Column(name = "DOB")
-	private LocalDateTime dob;
+	private Date dob;
 	
 	//############################# 	Getter & Setter 	#################################################################
 
-	public LocalDateTime getDob() {
+	public Date getDob() {
 		return dob;
 	}
 
-	public void setDob(LocalDateTime dob) {
+	public void setDob(Date dob) {
 		this.dob = dob;
 	}
 

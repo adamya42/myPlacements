@@ -6,12 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Role;
-import com.example.demo.model.UserInfo;
 import com.example.demo.model.UserLevel2;
 import com.example.demo.model.UserLevel4;
 import com.example.demo.model.UserLevel6;
 import com.example.demo.model.Users;
 import com.example.demo.model.SiteModel.Schools;
+import com.example.demo.model.helper_classes.AddUser;
+import com.example.demo.model.helper_classes.UserInfo;
 import com.example.demo.repository.Level2Repository;
 import com.example.demo.repository.Level4Repository;
 import com.example.demo.repository.Level6Repository;
@@ -19,10 +20,13 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.SiteRepository.SchoolRepository;
 
 import java.security.SecureRandom;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -92,14 +96,16 @@ public class AdminServices {
 		 else return null;
 	 }
 	 
-	 public String dateFormatterDOB(LocalDateTime myDateObj) {
-		 if(myDateObj != null) {
-		 DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy");//  MMM dd yyyy  hh:mm a  //E, dd MMM yyyy z
-		 String formattedDate = myDateObj.format(myFormatObj);   
-		 return formattedDate;
-		 }
-		 else return null;
-	 }
+//	 public String dateFormatterDOB(LocalDateTime myDateObj) throws ParseException {
+//		 if(myDateObj != null) {
+//		 DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd MM yyyy");//  MMM dd yyyy  hh:mm a  //E, dd MMM yyyy z
+//		 String formattedDate = myDateObj.format(myFormatObj); 
+//		// Date bday = new SimpleDateFormat("dd-MM-yyyy").parse(formattedDate);
+//		 return formattedDate;
+//		// return bday;
+//		 }
+//		 else return null;
+//	 }
 
 		
 	//################## Fetching all user 	#################################
@@ -132,7 +138,7 @@ public class AdminServices {
 		  
 	//################### 	find user by rolebased 	####################################
 		  		  
-		  public UserInfo roleBasedDetails(Users users) {
+		  public UserInfo roleBasedDetails(Users users) throws ParseException {
 			  UserInfo userInfo = new UserInfo();
 			  if (users.getRoleId()==0){
 				  return userInfo;
@@ -144,7 +150,7 @@ public class AdminServices {
 				  userInfo.setName(optUser.get().getName());
 				  userInfo.setDepartment(optUser.get().getDesignation());
 				  userInfo.setGender(genderServices.getGenderById(optUser.get().getGender()).get().getGender());
-				  userInfo.setDOB(dateFormatterDOB(optUser.get().getDob()));
+				  userInfo.setBday(optUser.get().getDob());
 				  userInfo.setPhoneNo(optUser.get().getPhoneNo());
 				  userInfo.setUniqueId(optUser.get().getEmployeeId());
 				  
@@ -157,7 +163,7 @@ public class AdminServices {
 				  userInfo.setName(optUser.get().getName());
 				  userInfo.setDepartment(optUser.get().getDesignation());
 				  userInfo.setGender(genderServices.getGenderById(optUser.get().getGender()).get().getGender());
-				  userInfo.setDOB(dateFormatterDOB(optUser.get().getDob()));
+				  userInfo.setBday(optUser.get().getDob());
 				  userInfo.setPhoneNo(optUser.get().getPhoneNo());
 				  userInfo.setUniqueId(optUser.get().getEmployeeId());
 				 
@@ -169,7 +175,7 @@ public class AdminServices {
 				  userInfo.setName(optUser.get().getName());
 				  userInfo.setDepartment((optUser.get().getSchool() + " - " + optUser.get().getBranch()));
 				  userInfo.setGender(genderServices.getGenderById(optUser.get().getGender()).get().getGender());
-				  userInfo.setDOB(dateFormatterDOB(optUser.get().getDob()));
+				  userInfo.setBday(optUser.get().getDob());
 				  userInfo.setPhoneNo(optUser.get().getPhoneNo());
 				  userInfo.setUniqueId(optUser.get().getRegistrationId());
 				 
@@ -180,7 +186,7 @@ public class AdminServices {
 		  
 	//################### 	Users details display method 	####################################
 		  
-		  public List<UserInfo> displayUsersDetails( List<Users> userList) { //Users users,
+		  public List<UserInfo> displayUsersDetails( List<Users> userList) throws ParseException { //Users users,
 			  UserInfo userInfo = new UserInfo();
 			  List<UserInfo> userListInfo = new ArrayList<>();
 			  
@@ -207,12 +213,17 @@ public class AdminServices {
 		
 	//################### Add Single User  #####################################
 		  
-			public String addUser(Users users) {
+			public String addUser(AddUser addUser) {
 				
 //				users.setCreatedBy(session value);
 				String pass=generatePassword();
 				
 				String encryptPass = pass; // later on encryption method will be used
+				
+				Users users = new Users();
+				
+				users.setEmail(addUser.getEmail());
+				users.setRoleId(addUser.getRoleId());
 				
 				users.setPassword(encryptPass);			
 				

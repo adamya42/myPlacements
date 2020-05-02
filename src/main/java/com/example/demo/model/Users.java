@@ -35,11 +35,10 @@ public class Users {//implements UserDetails{
 	
 	@Column(name = "Email",unique = true)
 	@Email(message = "Username needs to be an email")
-    @NotBlank(message = "username is required")
-	private String email;
+   	private String email;
 	
 	
-	@com.sun.istack.NotNull
+	
 	@Column(name = "RoleId")
 	private int roleId;
 	

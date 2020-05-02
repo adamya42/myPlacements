@@ -9,6 +9,9 @@ export const TOGGLE_IN_SELECTED_PRODUCTS =
 export const SELECT_ALL_PRODUCTS = "[E-COMMERCE APP] SELECT ALL PRODUCTS";
 export const DESELECT_ALL_PRODUCTS = "[E-COMMERCE APP] DESELECT ALL PRODUCTS";
 
+export const OPEN_ADD_USER_DIALOG = "[E-COMMERCE APP] OPEN_ADD_USER_DIALOG";
+export const CLOSE_ADD_USER_DIALOG = "[E-COMMERCE APP] CLOSE_ADD_USER_DIALOG";
+
 export const REMOVE_PRODUCT = "[E-COMMERCE APP] REMOVE PRODUCT";
 export const REMOVE_PRODUCTS = "[E-COMMERCE APP] REMOVE PRODUCTS";
 
@@ -47,6 +50,18 @@ export function toggleInSelectedProducts(productId) {
   return {
     type: TOGGLE_IN_SELECTED_PRODUCTS,
     productId,
+  };
+}
+
+export function openAddUserDialog() {
+  return {
+    type: OPEN_ADD_USER_DIALOG,
+  };
+}
+
+export function closeAddUserDialog() {
+  return {
+    type: CLOSE_ADD_USER_DIALOG,
   };
 }
 
