@@ -57,20 +57,6 @@ const navigationConfig = [
             url: "/apps/user-manager/addMultipleUsers",
             exact: false,
           },
-          {
-            id: "user-manager-orders",
-            title: "Orders",
-            type: "item",
-            url: "/apps/e-commerce/orders",
-            exact: true,
-          },
-          {
-            id: "user-manager-order-detail",
-            title: "Order Detail",
-            type: "item",
-            url: "/apps/user-manager/orders/1",
-            exact: true,
-          },
         ],
       },
       {
