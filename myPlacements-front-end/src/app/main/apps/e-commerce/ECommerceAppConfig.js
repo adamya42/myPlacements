@@ -8,11 +8,11 @@ export const ECommerceAppConfig = {
   routes: [
     {
       // path: "/apps/e-commerce/products/:productId/:productHandle?",
-      path: "/apps/e-commerce/products/:productId",
+      path: "/apps/user-manager/users/:productId",
       component: React.lazy(() => import("./product/Product")),
     },
     {
-      path: "/apps/e-commerce/products",
+      path: "/apps/user-manager/users",
       component: React.lazy(() => import("./products/Products")),
     },
     {
@@ -20,12 +20,14 @@ export const ECommerceAppConfig = {
       component: React.lazy(() => import("./order/Order")),
     },
     {
-      path: "/apps/e-commerce/orders",
-      component: React.lazy(() => import("./orders/Orders")),
+      path: "/apps/user-manager/addMultipleUsers",
+      component: React.lazy(() =>
+        import("./addMultipleUsers/AddMultipleUsers")
+      ),
     },
     {
-      path: "/apps/e-commerce",
-      component: () => <Redirect to="/apps/e-commerce/products" />,
+      path: "/apps/user-manager",
+      component: () => <Redirect to="/apps/user-manager/users" />,
     },
   ],
 };

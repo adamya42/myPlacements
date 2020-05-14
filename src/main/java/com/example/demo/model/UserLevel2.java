@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 
 
-import java.sql.Date;
+import java.util.Date;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -51,8 +51,8 @@ public class UserLevel2 {//placement coordinator
 		return dob;
 	}
 
-	public void setDob(Date dob) {
-		this.dob = dob;
+	public void setDob(Date date) {
+		this.dob = date;
 	}
 
 	public int getId() {

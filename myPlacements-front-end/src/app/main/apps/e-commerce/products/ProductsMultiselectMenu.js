@@ -16,6 +16,9 @@ function ProductsMultiSelectMenu(props) {
   const selectedProductIds = useSelector(
     ({ eCommerceApp }) => eCommerceApp.products.selectedProductIds
   );
+  const selectedId = {
+    id: selectedProductIds,
+  };
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -46,7 +49,7 @@ function ProductsMultiSelectMenu(props) {
         <MenuList>
           <MenuItem
             onClick={() => {
-              dispatch(Actions.removeProducts(selectedProductIds));
+              dispatch(Actions.removeUsers(selectedId));
               closeSelectedProductsMenu();
             }}
           >

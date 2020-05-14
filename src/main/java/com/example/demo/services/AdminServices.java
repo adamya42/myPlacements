@@ -11,7 +11,7 @@ import com.example.demo.model.UserLevel4;
 import com.example.demo.model.UserLevel6;
 import com.example.demo.model.Users;
 import com.example.demo.model.SiteModel.Schools;
-import com.example.demo.model.helper_classes.AddUser;
+import com.example.demo.model.helper_classes.AddSingleUser;
 import com.example.demo.model.helper_classes.UserInfo;
 import com.example.demo.repository.Level2Repository;
 import com.example.demo.repository.Level4Repository;
@@ -153,6 +153,7 @@ public class AdminServices {
 				  userInfo.setBday(optUser.get().getDob());
 				  userInfo.setPhoneNo(optUser.get().getPhoneNo());
 				  userInfo.setUniqueId(optUser.get().getEmployeeId());
+				  userInfo.setLevelId(optUser.get().getId());
 				  
 				  return userInfo;
 				 }
@@ -166,7 +167,7 @@ public class AdminServices {
 				  userInfo.setBday(optUser.get().getDob());
 				  userInfo.setPhoneNo(optUser.get().getPhoneNo());
 				  userInfo.setUniqueId(optUser.get().getEmployeeId());
-				 
+				  userInfo.setLevelId(optUser.get().getId());
 				  return userInfo;
 				  }
 			  else {
@@ -178,7 +179,7 @@ public class AdminServices {
 				  userInfo.setBday(optUser.get().getDob());
 				  userInfo.setPhoneNo(optUser.get().getPhoneNo());
 				  userInfo.setUniqueId(optUser.get().getRegistrationId());
-				 
+				  userInfo.setLevelId(optUser.get().getId());
 				  return userInfo;
 			  }
 			  }
@@ -213,7 +214,7 @@ public class AdminServices {
 		
 	//################### Add Single User  #####################################
 		  
-			public String addUser(AddUser addUser) {
+			public String addUser(AddSingleUser addUser) {
 				
 //				users.setCreatedBy(session value);
 				String pass=generatePassword();
@@ -302,8 +303,25 @@ public class AdminServices {
 			
 	//############# 	 deleting user by id 	#####################
 			
-			public void deleteUserByID(int userID){
-				
+			public void deleteUserByID(int userID,int role){
+				if (role <= 2)
+				{
+					 Optional<UserLevel2> optUser = level2Repository.findByuserID(userID);
+					 if(optUser.isPresent())
+					 level2Repository.deleteById(optUser.get().getId());
+				}
+				else if (role <= 4 && role > 2)
+				{
+					 Optional<UserLevel4> optUser = level4Repository.findByuserID(userID);
+					 if(optUser.isPresent())
+					 level4Repository.deleteById(optUser.get().getId());
+				}
+				else
+				{
+					 Optional<UserLevel6> optUser = level6Repository.findByuserID(userID);
+					 if(optUser.isPresent())
+					 level6Repository.deleteById(optUser.get().getId());
+				}
 				userRepository.deleteById(userID);
 			}
 

@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import withReducer from "app/store/withReducer";
 import * as Actions from "../store/actions";
 import reducer from "../store/reducers";
+import VerificationStatus from "./VerificationStatus";
+//import { Container, Row, Col } from "reactstrap";
 //import useDatePicker from "../products/useDatePicker";
 //import { DatePicker } from "@material-ui/pickers";
 //import DatePicker from "react-datepicker";
@@ -166,7 +168,7 @@ function Product(props) {
                   className="normal-case flex items-center sm:mb-12"
                   component={Link}
                   role="button"
-                  to="/apps/e-commerce/products"
+                  to="/apps/user-manager/users"
                   color="inherit"
                 >
                   <Icon className="mr-4 text-20">arrow_back</Icon>
@@ -200,18 +202,27 @@ function Product(props) {
                       {form.name ? form.name : "New Product"}
                     </Typography>
                   </FuseAnimate>
+
                   <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                     <Typography variant="caption">User Detail</Typography>
                   </FuseAnimate>
                 </div>
               </div>
+              <div className="flex flex-col min-w-1">
+                <FuseAnimate animation="transition.slideRightIn" delay={300}>
+                  <VerificationStatus
+                    name={form.verified ? "Verified" : "Not Verified"}
+                  />
+                </FuseAnimate>
+              </div>
             </div>
+
             <FuseAnimate animation="transition.slideRightIn" delay={300}>
               <Button
                 className="whitespace-no-wrap"
                 variant="contained"
                 disabled={!canBeSubmitted()}
-                onClick={() => dispatch(Actions.saveProduct(form))}
+                onClick={() => dispatch(Actions.saveUser(form))}
               >
                 Save
               </Button>

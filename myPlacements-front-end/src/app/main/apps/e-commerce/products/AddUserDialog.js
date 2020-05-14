@@ -16,10 +16,10 @@ import { useForm } from "@fuse/hooks";
 import FuseUtils from "@fuse/FuseUtils";
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { showMessage } from "app/store/actions";
 
 const defaultFormState = {
   email: "",
-  id: "",
 
   roleId: "",
 };
@@ -46,7 +46,7 @@ function AddUserDialog(props) {
       setForm({
         ...defaultFormState,
         // ...addUserDialog.data,
-        id: FuseUtils.generateGUID(),
+        // id: FuseUtils.generateGUID(),
       });
     }
     //}, [addUserDialog.data, addUserDialog.type, setForm]);
@@ -74,15 +74,14 @@ function AddUserDialog(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(form);
+
+    //console.log(form);
 
     if (addUserDialog.type === "new") {
       dispatch(Actions.addSingleUser(form));
     }
-    // else {
-    //   dispatch(Actions.updateContact(form));
-    // }
-    //  closeComposeDialog();
+
+    closeComposeDialog();
   }
 
   // function handleSubmit() {

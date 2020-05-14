@@ -10,7 +10,7 @@ const initialState = {
     props: {
       open: false,
     },
-    data: [],
+    data: {},
   },
 };
 
@@ -84,6 +84,18 @@ const productsReducer = function (state = initialState, action) {
             open: false,
           },
           data: [],
+        },
+      };
+    }
+    case Actions.ADD_SINGLE_USER: {
+      return {
+        ...state,
+        addUserDialog: {
+          type: "new",
+          props: {
+            open: false,
+          },
+          data: action.payload,
         },
       };
     }

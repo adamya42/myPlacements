@@ -14,6 +14,7 @@ public class UserInfo {
 	private String department;
 	private String gender;
 	
+	private int levelId;
 	
 	private boolean active;
 	private boolean verified;
@@ -113,6 +114,12 @@ public class UserInfo {
 	}
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
+	}
+	public int getLevelId() {
+		return levelId;
+	}
+	public void setLevelId(int levelId) {
+		this.levelId = levelId;
 	}
 	
 

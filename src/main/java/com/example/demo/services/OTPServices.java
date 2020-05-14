@@ -138,7 +138,7 @@ public class OTPServices {
 
 
 
-	public void mailDelivery(String to, String value,String subject,String text) throws MessagingException {
+	public void mailDelivery(String to, String value,String subject,String text) {
 
        SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(to);

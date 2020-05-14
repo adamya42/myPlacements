@@ -38,7 +38,7 @@ function ProductsTable(props) {
   }, [dispatch]);
 
   function handleClick(item) {
-    props.history.push("/apps/e-commerce/products/" + item.id);
+    props.history.push("/apps/user-manager/users/" + item.id);
   }
   //+ "/" + item.handle
 

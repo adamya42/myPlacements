@@ -2,6 +2,7 @@ import * as Actions from "../actions";
 
 const initialState = {
   data: [],
+
   routeParams: {},
 };
 
@@ -19,12 +20,13 @@ const productReducer = function (state = initialState, action) {
         data: action.payload,
       };
     }
-    case Actions.ADD_SINGLE_USER: {
-      return {
-        ...state,
-        data: action.payload,
-      };
-    }
+    // case Actions.ADD_SINGLE_USER: {
+    //   return {
+    //     ...state,
+    //     data: action.payload,
+    //   };
+    // }
+
     default: {
       return state;
     }

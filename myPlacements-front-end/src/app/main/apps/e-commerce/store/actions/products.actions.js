@@ -65,13 +65,14 @@ export function closeAddUserDialog() {
   };
 }
 
-export function removeProducts(productIds) {
+export function removeUsers(productIds) {
   return (dispatch, getState) => {
     const { routeParams } = getState().eCommerceApp.products;
 
-    const request = axios.post("/api/contacts-app/remove-contacts", {
-      productIds,
-    });
+    const request = axios.post(
+      "http://localhost:8080/admin/api/users/delete",
+      productIds
+    );
 
     return request.then((response) =>
       Promise.all([

@@ -1,7 +1,6 @@
 import axios from "axios";
-import { FuseUtils } from "@fuse";
 import { showMessage } from "app/store/actions/fuse";
-import { getProducts } from "./products.actions";
+import history from "@history";
 
 export const GET_PRODUCT = "[E-COMMERCE APP] GET PRODUCT";
 export const SAVE_PRODUCT = "[E-COMMERCE APP] SAVE PRODUCT";
@@ -19,35 +18,63 @@ export function getProduct(params) {
     );
 }
 
-export function saveProduct(data) {
-  const request = axios.post("/api/e-commerce-app/product/save", data);
+export function saveUser(data) {
+  const request = axios.post("http://localhost:8080/user/updateUser", data);
 
-  return (dispatch) =>
+  return (dispatch) => {
     request.then((response) => {
-      dispatch(showMessage({ message: "Product Saved" }));
+      try {
+        dispatch(showMessage({ message: "Product Saved" }));
 
-      return dispatch({
-        type: SAVE_PRODUCT,
-        payload: response.data,
-      });
+        return dispatch(
+          // {
+          //   type: SAVE_PRODUCT,
+          //   payload: response.data,
+          // },
+          getProduct(data.id)
+        );
+        // return dispatch;
+      } catch (error) {
+        dispatch(showMessage({ message: response.data }));
+      }
     });
+  };
 }
 
 export function addSingleUser(addUser) {
-  return (dispatch, getState) => {
-    const { routeParams } = getState().eCommerceApp.products;
-
+  return (dispatch) => {
     const request = axios.post(
       "http://localhost:8080/admin/api/addSingleUser",
       addUser
     );
 
-    return request.then((response) =>
-      Promise.all([
-        dispatch({
+    return request.then((response) => {
+      if (response.status > 199 && response.status < 299) {
+        dispatch(showMessage({ message: response.data }));
+        history.push("/apps/user-manager");
+
+        return dispatch({
           type: ADD_SINGLE_USER,
-        }),
-      ]).then(() => dispatch(getProducts(routeParams)))
-    );
+          payload: response.data,
+        });
+      } else {
+        dispatch(showMessage({ message: "alredy available" }));
+      }
+    });
   };
 }
+
+// return request.then((response) => {
+//   try {
+//     Promise.all([
+//       dispatch({
+//         type: ADD_SINGLE_USER,
+//       }),
+//     ]).then(() => dispatch(getProducts()));
+//     {
+//       props.history.push("/apps/user-manager/users");
+//     }
+//   } catch (error) {
+//     dispatch(showMessage({ message: "alredy available" }));
+//   }
+// });

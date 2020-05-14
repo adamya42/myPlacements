@@ -59,31 +59,7 @@ public class UserController {
 	        ResponseEntity<?> updateResponse = userServices.UpdateUserInfo(userInfo);
 			return updateResponse;
 		
-		//Optional<Users> optUser =  adminServices.getUserByMail(user.getEmail());
-		
-		
-		
-//		if (optUser.isPresent()) {
-//			return new ResponseEntity<>("User Name already exist.", HttpStatus.NOT_FOUND);
-//		}
-//		else {
-//			
-//	//	user.setCreatedBy('session user');	
-//			
-//		
-//			String credential =	adminServices.addUser(user);
-//
-//		String mail = user.getEmail();
-//		String subject = messageServices.getMailSubjectCredentials();
-//		String text = messageServices.getMailtextCredentials();
-//		
-//		//String credential=user.getPassword();
-//		
-//	//---------Send Credentials---------- 	
-//		otpServices.mailDelivery(mail, credential,subject,text);
-//		
-//		return new ResponseEntity<>("User << " + user.getEmail() + " >> Registered and credentials Send Successfully!", HttpStatus.OK);
-//	}
+
 	}
 
 
