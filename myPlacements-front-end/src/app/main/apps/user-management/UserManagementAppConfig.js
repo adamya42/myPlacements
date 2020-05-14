@@ -1,24 +1,21 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 
-export const ECommerceAppConfig = {
+export const UserManagementAppConfig = {
   settings: {
     layout: {},
   },
   routes: [
     {
-      // path: "/apps/e-commerce/products/:productId/:productHandle?",
-      path: "/apps/user-manager/users/:productId",
-      component: React.lazy(() => import("./product/Product")),
+      // path: "/apps/e-commerce/Users/:UserId/:UserHandle?",
+      path: "/apps/user-manager/users/:userId",
+      component: React.lazy(() => import("./user/User")),
     },
     {
       path: "/apps/user-manager/users",
-      component: React.lazy(() => import("./products/Products")),
+      component: React.lazy(() => import("./users/Users")),
     },
-    {
-      path: "/apps/e-commerce/orders/:orderId",
-      component: React.lazy(() => import("./order/Order")),
-    },
+
     {
       path: "/apps/user-manager/addMultipleUsers",
       component: React.lazy(() =>

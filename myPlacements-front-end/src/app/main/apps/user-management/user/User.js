@@ -62,37 +62,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Product(props) {
+function User(props) {
   const dispatch = useDispatch();
-  const product = useSelector(({ eCommerceApp }) => eCommerceApp.product);
+  const user = useSelector(({ userManagerApp }) => userManagerApp.user);
 
   const classes = useStyles(props);
   const [tabValue, setTabValue] = useState(0);
   const { form, handleChange, setForm } = useForm(null);
 
   useEffect(() => {
-    function updateProductState() {
+    function updateUserState() {
       const params = props.match.params;
-      const { productId } = params;
+      const { userId } = params;
 
       // if (productId === "new") {
-      //   dispatch(Actions.newProduct());
+      //   dispatch(Actions.newUser());
       // } else {
-      dispatch(Actions.getProduct(productId));
+      dispatch(Actions.getUser(userId));
       //}
     }
 
-    updateProductState();
+    updateUserState();
   }, [dispatch, props.match.params]);
 
   useEffect(() => {
     if (
-      (product.data[0] && !form) ||
-      (product.data[0] && form && product.data[0].id !== form.id)
+      (user.data[0] && !form) ||
+      (user.data[0] && form && user.data[0].id !== form.id)
     ) {
-      setForm(product.data[0]);
+      setForm(user.data[0]);
     }
-  }, [form, product.data[0], setForm]);
+  }, [form, user.data[0], setForm]);
 
   function handleChangeTab(event, tabValue) {
     setTabValue(tabValue);
@@ -150,7 +150,8 @@ function Product(props) {
   }
 
   function canBeSubmitted() {
-    return form.name.length > 0 && !_.isEqual(product.data[0], form);
+    return !_.isEqual(user.data[0], form);
+    //return form.name.length > 0 && !_.isEqual(user.data[0], form);
   }
 
   return (
@@ -199,7 +200,7 @@ function Product(props) {
                 <div className="flex flex-col min-w-0">
                   <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                     <Typography className="text-16 sm:text-20 truncate">
-                      {form.name ? form.name : "New Product"}
+                      {form.name ? form.name : "New User"}
                     </Typography>
                   </FuseAnimate>
 
@@ -617,4 +618,4 @@ function Product(props) {
   );
 }
 
-export default withReducer("eCommerceApp", reducer)(Product);
+export default withReducer("userManagerApp", reducer)(User);

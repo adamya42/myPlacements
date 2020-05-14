@@ -11,22 +11,22 @@ import {
 import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 
-function ProductsMultiSelectMenu(props) {
+function UsersMultiSelectMenu(props) {
   const dispatch = useDispatch();
-  const selectedProductIds = useSelector(
-    ({ eCommerceApp }) => eCommerceApp.products.selectedProductIds
+  const selectedUserIds = useSelector(
+    ({ userManagerApp }) => userManagerApp.users.selectedUserIds
   );
   const selectedId = {
-    id: selectedProductIds,
+    id: selectedUserIds,
   };
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  function openSelectedProductMenu(event) {
+  function openSelectedUserMenu(event) {
     setAnchorEl(event.currentTarget);
   }
 
-  function closeSelectedProductsMenu() {
+  function closeSelectedUsersMenu() {
     setAnchorEl(null);
   }
 
@@ -34,23 +34,23 @@ function ProductsMultiSelectMenu(props) {
     <React.Fragment>
       <IconButton
         className="p-0"
-        aria-owns={anchorEl ? "selectedProductsMenu" : null}
+        aria-owns={anchorEl ? "selectedUsersMenu" : null}
         aria-haspopup="true"
-        onClick={openSelectedProductMenu}
+        onClick={openSelectedUserMenu}
       >
         <Icon>more_horiz</Icon>
       </IconButton>
       <Menu
-        id="selectedProductsMenu"
+        id="selectedUsersMenu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
-        onClose={closeSelectedProductsMenu}
+        onClose={closeSelectedUsersMenu}
       >
         <MenuList>
           <MenuItem
             onClick={() => {
               dispatch(Actions.removeUsers(selectedId));
-              closeSelectedProductsMenu();
+              closeSelectedUsersMenu();
             }}
           >
             <ListItemIcon className="min-w-40">
@@ -64,4 +64,4 @@ function ProductsMultiSelectMenu(props) {
   );
 }
 
-export default ProductsMultiSelectMenu;
+export default UsersMultiSelectMenu;

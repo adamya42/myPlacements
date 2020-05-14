@@ -6,15 +6,15 @@ const initialState = {
   routeParams: {},
 };
 
-const productReducer = function (state = initialState, action) {
+const userReducer = function (state = initialState, action) {
   switch (action.type) {
-    case Actions.GET_PRODUCT: {
+    case Actions.GET_USER: {
       return {
         ...state,
         data: action.payload,
       };
     }
-    case Actions.SAVE_PRODUCT: {
+    case Actions.SAVE_USER: {
       return {
         ...state,
         data: action.payload,
@@ -33,4 +33,4 @@ const productReducer = function (state = initialState, action) {
   }
 };
 
-export default productReducer;
+export default userReducer;

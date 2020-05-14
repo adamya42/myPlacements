@@ -3,7 +3,7 @@ import * as Actions from "../actions";
 const initialState = {
   data: [],
   searchText: "",
-  selectedProductIds: [],
+  selectedUserIds: [],
   routeParams: {},
   addUserDialog: {
     type: "new",
@@ -14,52 +14,50 @@ const initialState = {
   },
 };
 
-const productsReducer = function (state = initialState, action) {
+const usersReducer = function (state = initialState, action) {
   switch (action.type) {
-    case Actions.GET_PRODUCTS: {
+    case Actions.GET_USERS: {
       return {
         ...state,
         data: action.payload,
       };
     }
-    case Actions.SET_PRODUCTS_SEARCH_TEXT: {
+    case Actions.SET_USERS_SEARCH_TEXT: {
       return {
         ...state,
         searchText: action.searchText,
       };
     }
-    case Actions.SELECT_ALL_PRODUCTS: {
+    case Actions.SELECT_ALL_USERS: {
       const arr = Object.keys(state.data).map((k) => state.data[k]);
 
-      const selectedProductIds = arr.map((product) => product.id);
+      const selectedUserIds = arr.map((user) => user.id);
 
       return {
         ...state,
-        selectedProductIds: selectedProductIds,
+        selectedUserIds: selectedUserIds,
       };
     }
-    case Actions.DESELECT_ALL_PRODUCTS: {
+    case Actions.DESELECT_ALL_USERS: {
       return {
         ...state,
-        selectedProductIds: [],
+        selectedUserIds: [],
       };
     }
-    case Actions.TOGGLE_IN_SELECTED_PRODUCTS: {
-      const productId = action.productId;
+    case Actions.TOGGLE_IN_SELECTED_USERS: {
+      const userId = action.userId;
 
-      let selectedProductIds = [...state.selectedProductIds];
+      let selectedUserIds = [...state.selectedUserIds];
 
-      if (selectedProductIds.find((id) => id === productId) !== undefined) {
-        selectedProductIds = selectedProductIds.filter(
-          (id) => id !== productId
-        );
+      if (selectedUserIds.find((id) => id === userId) !== undefined) {
+        selectedUserIds = selectedUserIds.filter((id) => id !== userId);
       } else {
-        selectedProductIds = [...selectedProductIds, productId];
+        selectedUserIds = [...selectedUserIds, userId];
       }
 
       return {
         ...state,
-        selectedProductIds: selectedProductIds,
+        selectedUserIds: selectedUserIds,
       };
     }
 
@@ -105,4 +103,4 @@ const productsReducer = function (state = initialState, action) {
   }
 };
 
-export default productsReducer;
+export default usersReducer;

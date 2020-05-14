@@ -2,17 +2,17 @@ import axios from "axios";
 import { showMessage } from "app/store/actions/fuse";
 import history from "@history";
 
-export const GET_PRODUCT = "[E-COMMERCE APP] GET PRODUCT";
-export const SAVE_PRODUCT = "[E-COMMERCE APP] SAVE PRODUCT";
-export const ADD_SINGLE_USER = "[E-COMMERCE APP] ADD SINGLE USER";
+export const GET_USER = "[USER-MANAGER APP] GET USER";
+export const SAVE_USER = "[USER-MANAGER APP] SAVE USER";
+export const ADD_SINGLE_USER = "[USER-MANAGER APP] ADD SINGLE USER";
 
-export function getProduct(params) {
+export function getUser(params) {
   //const request = axios.get("/api/e-commerce-app/product", { params });
   const request = axios.get("http://localhost:8080/admin/api/users/" + params);
   return (dispatch) =>
     request.then((response) =>
       dispatch({
-        type: GET_PRODUCT,
+        type: GET_USER,
         payload: response.data,
       })
     );
@@ -24,14 +24,14 @@ export function saveUser(data) {
   return (dispatch) => {
     request.then((response) => {
       try {
-        dispatch(showMessage({ message: "Product Saved" }));
+        dispatch(showMessage({ message: "User Saved" }));
 
         return dispatch(
           // {
-          //   type: SAVE_PRODUCT,
+          //   type: SAVE_USER,
           //   payload: response.data,
           // },
-          getProduct(data.id)
+          getUser(data.id)
         );
         // return dispatch;
       } catch (error) {

@@ -9,23 +9,21 @@ import * as Actions from "../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import ReactTable from "react-table";
 import { FuseUtils, FuseAnimate } from "@fuse";
-import ProductsMultiSelectMenu from "./ProductsMultiselectMenu";
+import UsersMultiSelectMenu from "./UsersMultiselectMenu";
 
-function ProductsTable(props) {
+function UsersTable(props) {
   const dispatch = useDispatch();
-  const products = useSelector(
-    ({ eCommerceApp }) => eCommerceApp.products.data
-  );
+  const users = useSelector(({ userManagerApp }) => userManagerApp.users.data);
   const searchText = useSelector(
-    ({ eCommerceApp }) => eCommerceApp.products.searchText
+    ({ userManagerApp }) => userManagerApp.users.searchText
   );
 
-  const selectedProductIds = useSelector(
-    ({ eCommerceApp }) => eCommerceApp.products.selectedProductIds
+  const selectedUserIds = useSelector(
+    ({ userManagerApp }) => userManagerApp.users.selectedUserIds
   );
 
   //const [selected, setSelected] = useState([]);
-  // const [data, setData] = useState(products);
+  // const [data, setData] = useState(users);
   // const [page, setPage] = useState(0);
   // const [rowsPerPage, setRowsPerPage] = useState(10);
   // const [order, setOrder] = useState({
@@ -34,7 +32,7 @@ function ProductsTable(props) {
   // });
 
   useEffect(() => {
-    dispatch(Actions.getProducts());
+    dispatch(Actions.getUsers());
   }, [dispatch]);
 
   function handleClick(item) {
@@ -55,10 +53,10 @@ function ProductsTable(props) {
       return FuseUtils.filterArrayByString(arr, searchText);
     }
 
-    if (products) {
-      setFilteredData(getFilteredArray(products, searchText));
+    if (users) {
+      setFilteredData(getFilteredArray(users, searchText));
     }
-  }, [products, searchText]);
+  }, [users, searchText]);
 
   if (!filteredData) {
     return null;
@@ -68,7 +66,7 @@ function ProductsTable(props) {
     return (
       <div className="flex flex-1 items-center justify-center h-full">
         <Typography color="textSecondary" variant="h5">
-          There are no products!
+          There are no users!
         </Typography>
       </div>
     );
@@ -103,18 +101,16 @@ function ProductsTable(props) {
                     }}
                     onChange={(event) => {
                       event.target.checked
-                        ? dispatch(Actions.selectAllProducts())
-                        : dispatch(Actions.deSelectAllProducts());
+                        ? dispatch(Actions.selectAllUsers())
+                        : dispatch(Actions.deSelectAllUsers());
                     }}
                     checked={
-                      selectedProductIds.length ===
-                        Object.keys(products).length &&
-                      selectedProductIds.length > 0
+                      selectedUserIds.length === Object.keys(users).length &&
+                      selectedUserIds.length > 0
                     }
                     indeterminate={
-                      selectedProductIds.length !==
-                        Object.keys(products).length &&
-                      selectedProductIds.length > 0
+                      selectedUserIds.length !== Object.keys(users).length &&
+                      selectedUserIds.length > 0
                     }
                   />
                 ),
@@ -125,9 +121,9 @@ function ProductsTable(props) {
                       onClick={(event) => {
                         event.stopPropagation();
                       }}
-                      checked={selectedProductIds.includes(row.value.id)}
+                      checked={selectedUserIds.includes(row.value.id)}
                       onChange={() =>
-                        dispatch(Actions.toggleInSelectedProducts(row.value.id))
+                        dispatch(Actions.toggleInSelectedUsers(row.value.id))
                       }
                     />
                   );
@@ -138,7 +134,7 @@ function ProductsTable(props) {
               },
               {
                 Header: () =>
-                  selectedProductIds.length > 0 && <ProductsMultiSelectMenu />,
+                  selectedUserIds.length > 0 && <UsersMultiSelectMenu />,
                 accessor: "avatar",
                 Cell: "",
                 className: "justify-center",
@@ -215,4 +211,4 @@ function ProductsTable(props) {
   );
 }
 
-export default withRouter(ProductsTable);
+export default withRouter(UsersTable);

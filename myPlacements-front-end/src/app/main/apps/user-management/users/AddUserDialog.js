@@ -27,7 +27,7 @@ const defaultFormState = {
 function AddUserDialog(props) {
   const dispatch = useDispatch();
   const addUserDialog = useSelector(
-    ({ eCommerceApp }) => eCommerceApp.products.addUserDialog
+    ({ userManagerApp }) => userManagerApp.users.addUserDialog
   );
 
   const { form, handleChange, setForm } = useForm(defaultFormState);

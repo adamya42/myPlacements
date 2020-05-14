@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import * as Actions from "../store/actions";
 
-function ProductsHeader(props) {
+function UsersHeader(props) {
   const dispatch = useDispatch();
   //const classes = useStyles(props);
   const searchText = useSelector(
-    ({ eCommerceApp }) => eCommerceApp.products.searchText
+    ({ userManagerApp }) => userManagerApp.users.searchText
   );
   const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
@@ -47,7 +47,7 @@ function ProductsHeader(props) {
                 inputProps={{
                   "aria-label": "Search",
                 }}
-                onChange={(ev) => dispatch(Actions.setProductsSearchText(ev))}
+                onChange={(ev) => dispatch(Actions.setUsersSearchText(ev))}
               />
             </Paper>
           </FuseAnimate>
@@ -71,4 +71,4 @@ function ProductsHeader(props) {
   );
 }
 
-export default ProductsHeader;
+export default UsersHeader;
