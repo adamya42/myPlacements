@@ -368,22 +368,7 @@ public class AdminServices {
 //##########################################################################################################
 
 			
-	//################ 	 Find School by Code 	###########################
-			
-			public Optional<Schools> getSchoolbyCode(String schoolCode) {
-				
-				 Optional<Schools> optSchoolbyCode = schoolRepository.findBySchoolCode(schoolCode); 
-				  return  optSchoolbyCode;				
-				
-			}
-
-
-	//################ 	 Add School  	###########################			
-
-			public void addSchool(Schools school) {
-				schoolRepository.save(school);
-				
-			}
+	
 
 			
 			

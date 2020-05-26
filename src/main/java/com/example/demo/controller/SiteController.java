@@ -14,34 +14,69 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.Role;
 import com.example.demo.model.Users;
 import com.example.demo.model.SiteModel.Schools;
 import com.example.demo.model.helper_classes.UserInfo;
 import com.example.demo.services.AdminServices;
+import com.example.demo.services.RoleServices;
+import com.example.demo.services.SiteServices;
 import com.example.demo.services.ValidationErrorServices;
 import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/site/api")
+@RequestMapping("/site")
 public class SiteController {
 	@Autowired
 	private AdminServices adminServices;
 	
 	@Autowired
+	private SiteServices siteServices;
+	
+	@Autowired
+	private RoleServices roleServices;	
+	
+	@Autowired
 	private ValidationErrorServices validationErrorServices;
 	
 	
-	//##################################### 	Add School		##########################################
+
+	//##################################### 	Add Role		##########################################
 	
-	@PostMapping("/admin/addSchool")
-	public ResponseEntity<?> addUser(@Valid @RequestBody Schools school, BindingResult result) throws MessagingException {
+	@PostMapping("/addRoles")
+	public ResponseEntity<?> addRole(@Valid @RequestBody Role role, BindingResult result) throws MessagingException {
 		
 		if(result.hasErrors()) {
 			return new ResponseEntity<String>("Invalid user object passed",HttpStatus.BAD_REQUEST);
 		}
 		
-		Optional<Schools> optSchool = adminServices.getSchoolbyCode(school.getSchoolCode());
+		Optional<Role> optRole = roleServices.getRoleById(role.getRoleId());
+		
+		if(optRole.isPresent()) {
+			return new ResponseEntity<>("Role Name already exist.", HttpStatus.EXPECTATION_FAILED);
+		}
+		else {
+			if(role.getRoleId()>=2) {
+			roleServices.addRole(role);
+			return new ResponseEntity<>("Role << " + role.getRoleAs() + " >> Registered Successfully!", HttpStatus.OK);
+			
+		}
+			else { return new ResponseEntity<>("Un-Authorised", HttpStatus.EXPECTATION_FAILED);
+			}
+	
+	}
+	}
+	//##################################### 	Add School		##########################################
+	
+	@PostMapping("/addSchool")
+	public ResponseEntity<?> addSchool(@Valid @RequestBody Schools school, BindingResult result) throws MessagingException {
+		
+		if(result.hasErrors()) {
+			return new ResponseEntity<String>("Invalid user object passed",HttpStatus.BAD_REQUEST);
+		}
+		
+		Optional<Schools> optSchool = siteServices.getSchoolbyCode(school.getSchoolCode());
 		
 		if (optSchool.isPresent()) {
 			return new ResponseEntity<>("School Name already exist.", HttpStatus.NOT_FOUND);
@@ -51,7 +86,7 @@ public class SiteController {
 	//	school.setCreatedBy('session user');	
 			
 		
-		adminServices.addSchool(school);		
+		siteServices.addSchool(school);		
 
 		
 		return new ResponseEntity<>("School << " + school.getSchoolName() + " >> Registered Successfully!", HttpStatus.OK);

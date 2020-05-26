@@ -51,7 +51,7 @@ const navigationConfig = [
           },
 
           {
-            id: "user-manager-new-product",
+            id: "user-manager-addMultiple",
             title: "Add multiple Users",
             type: "item",
             url: "/apps/user-manager/addMultipleUsers",
